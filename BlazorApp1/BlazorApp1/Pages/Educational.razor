@@ -1,0 +1,145 @@
+﻿@page "/educational"
+@using Microsoft.AspNetCore.Components.Forms
+@using NPOI.SS.UserModel;
+@using NPOI.XSSF.UserModel;
+@using Microsoft.Extensions.Logging
+@inject ILogger<educational> Logger
+
+<PageTitle>educational activity</PageTitle>
+<h2>ДОСТИЖЕНИЯ В УЧЕБНОЙ ДЕЯТЕЛЬНОСТИ													
+</h2>
+
+<EditForm Model="@exampleModel" OnSubmit="@HandleSubmit">
+   <h5> 1. Получение студентом по итогам промежуточной аттестации в течение не менее 2 следующих друг за другом семестров, предшествующих назначению стипендии, только оценок «отлично».</h5>
+
+     <label>Количество засчитываемых семестров  за период обучения  <br />
+         (с оценками «хорошо» или «хорошо» и «отлично» или «отлично» за период обучения):</label><br />
+         <InputText id="year" @bind-Value="exampleModel.Count" /><br />
+        <label>Доля оценок «отлично» в % относительно общего количества оценок за период обучения:</label><br />
+         <InputText id="year" @bind-Value="exampleModel.Share" /><br />
+         <label>Количество сессий, сданных только на «отлично» (за период обучения):</label><br />
+         <InputText id="year" @bind-Value="exampleModel.Great" /><br />
+  
+<h5>2. Признание студента победителем или призером международной, всероссийской, ведомственной или региональной олимпиады, конкурса, соревнования, состязания или иного мероприятия, направленных на выявление учебных достижений студентов, проведенных в течение года, предшествующего назначению повышенной стипендии. </h5>
+    <label>Международного уровня:</label><br />
+
+   <input @onclick = '() => National("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+
+    <input @onclick = '() => National(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+    <label>Итого за весь период:</label>
+    <InputText id="year" @bind-Value="exampleModel.NationalAll" /><br />
+
+     <label>Всероссийского уровня:</label><br />
+
+   <input @onclick = '() => Russian("+")' type="radio" id="contactChoice1"
+     name="russian" >
+    <label for="contactChoice1">Да</label>  
+
+    <input @onclick = '() => Russian(" ")' type="radio" id="contactChoice2"
+     name="russian">
+    <label for="contactChoice2">Нет</label><br />
+        <label>Итого за весь период:</label>
+    <InputText id="year" @bind-Value="exampleModel.RussianAll" /><br />
+      <label>Ведомственного/Регионального уровня:</label><br />
+
+   <input @onclick = '() => Regional("+")' type="radio" id="contactChoice1"
+     name="region" >
+    <label for="contactChoice1">Да</label>  
+
+    <input @onclick = '() => Regional(" ")' type="radio" id="contactChoice2"
+     name="region">
+    <label for="contactChoice2">Нет</label><br />
+        <label>Итого за весь период:</label>
+    <InputText id="year" @bind-Value="exampleModel.RegionalAll" /><br />
+
+    <h5> 3. Получение студентом в течение года, предшествующего назначению повышенной стипендии, награды (приза) за результаты проектной деятельности и (или) опытно-конструкторской работы.</h5>
+      <label>За первый из представленных семестров:</label><br />
+   <input @onclick = '() => Project1("+")' type="radio" id="contactChoice1"
+     name="project1" >
+    <label for="contactChoice1">Да</label>  
+
+    <input @onclick = '() => Project1(" ")' type="radio" id="contactChoice2"
+     name="project1">
+    <label for="contactChoice2">Нет</label><br />
+
+       <label>За второй из представленных семестров:</label><br />
+
+   <input @onclick = '() => Project2("+")' type="radio" id="contactChoice1"
+     name="project2" >
+    <label for="contactChoice1">Да</label>  
+
+    <input @onclick = '() => Project2(" ")' type="radio" id="contactChoice2"
+     name="project2">
+    <label for="contactChoice2">Нет</label><br />
+
+    <label>Итого за весь период:</label>
+    <InputText id="project" @bind-Value="exampleModel.ProjectAll" /><br />
+         <button type="submit">Подтвердить</button>
+ </EditForm>
+
+
+@code {
+    private educational exampleModel = new();
+
+    private void HandleSubmit() {
+        IWorkbook workbook = new XSSFWorkbook("ress.xlsx");
+     
+        AddCell(workbook, 1, 8, 13, exampleModel.Count);
+        AddCell(workbook, 1, 10, 13, exampleModel.Share);
+        AddCell(workbook, 1, 12, 13, exampleModel.Great);
+        AddCell(workbook, 1, 14, 11, exampleModel.National);
+        AddCell(workbook, 1, 14, 13, exampleModel.NationalAll);
+        AddCell(workbook, 1, 16, 11, exampleModel.Russian);
+        AddCell(workbook, 1, 16, 13, exampleModel.RussianAll);
+        AddCell(workbook, 1, 18, 11, exampleModel.Regional);
+        AddCell(workbook, 1, 18, 13, exampleModel.RegionalAll);
+        AddCell(workbook, 1, 20, 11, exampleModel.ProjectSem1);
+        AddCell(workbook, 1, 20, 12, exampleModel.ProjectSem2);
+        AddCell(workbook, 1, 20, 13, exampleModel.ProjectAll);
+        string ExcelPath = "resss.xlsx";
+        MemoryStream stream = new MemoryStream();
+        workbook.Write(stream, false);
+        var buf = stream.ToArray();
+        using (FileStream fs = new FileStream(ExcelPath, FileMode.Create, FileAccess.Write))
+        {
+            fs.Write(buf, 0, buf.Length);
+            fs.Flush();
+        }
+
+    }
+    private void AddCell(IWorkbook workbook, int sheet1, int row, int cell, string value)
+    {
+        var sheet = workbook.GetSheetAt(sheet1);
+        var row1 = sheet.GetRow(row);
+        var cell1 = row1.GetCell(cell);
+        cell1.SetCellValue(value);
+    }
+    private void National(string answ){
+        exampleModel.National = answ;
+    }
+    private void Russian(string answ)
+    {
+        exampleModel.Russian = answ;
+    }
+    private void Regional(string answ)
+    {
+        exampleModel.Regional = answ;
+    }
+    private void Project1(string answ)
+    {
+        exampleModel.ProjectSem1 = answ;
+    }
+    private void Project2(string answ)
+    {
+        exampleModel.ProjectSem2 = answ;
+    }
+}
+
+
+         
+    
+

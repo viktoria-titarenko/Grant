@@ -1,0 +1,221 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager NavManager
+@using NPOI.SS.UserModel;
+@using NPOI.XSSF.UserModel;
+<PageTitle>Grant</PageTitle>
+
+@using Microsoft.Extensions.Logging
+@inject ILogger<index> Logger
+<h1>Пожалуйста заполните форму для генерации заявления на повышенную академическую стипендию. </h1>
+
+<EditForm Model="@exampleModel" OnSubmit="@HandleSubmit"><br />
+    <label>Текущий учебный год 
+      (укажите в формате 20хх-20хх):</label><br />
+    <InputText id="year" @bind-Value="exampleModel.Year" /><br />
+
+    <label>Текущий семестр:</label><br />
+   <input @onclick = "() => Methoion(1)" type="radio" id="contactChoice1"
+     name="semestr" >
+    <label for="contactChoice1">1</label>  
+
+    <input @onclick = "() => Methoion(2)" type="radio" id="contactChoice2"
+     name="semestr">
+    <label for="contactChoice2">2</label><br />
+
+    <label>Факультет/институт (название укажите полностью):</label><br />
+    <InputText id="faculty" @bind-Value="exampleModel.Faculty" /><br />
+
+    <label> Фамилия, имя, отчество (при наличии):</label><br />
+    <InputText id="fio" @bind-Value="exampleModel.Fio" /><br />
+
+    <label> Мобильный телефон:</label><br />
+    <InputText id="number" @bind-Value="exampleModel.Number" /><br />
+
+     <label>  E-mail:</label><br />
+    <InputText id="email" @bind-Value="exampleModel.Email" /><br />
+
+       <label>  Дата:</label><br />
+    <InputText id="date" @bind-Value="exampleModel.Date" /><br />
+
+    <label>Номинации (можно выбрать несколько):</label><br />
+     <input type="checkbox" id="Choice1"
+     name="nomination"  @onclick = "() => AddList(1)" >
+    <label for="contactChoice1">Достижения в учебной деятельность</label> <br />
+
+    <input type="checkbox" id="Choice2"
+     name="nomination" @onclick = "() => AddList(2)">
+    <label for="contactChoice2">Достижения в научно-исследовательской деятельности</label> <br />
+
+    <input type="checkbox" id="Choice3"
+     name="nomination" @onclick = "() => AddList(3)">
+    <label for="contactChoice1">Достижения в общественной деятельность</label> <br />
+
+    <input type="checkbox" id="Choice4"
+     name="nomination" @onclick = "() => AddList(4)">
+    <label for="contactChoice2">Достижения в культурно-творческой деятельности</label> <br />
+
+    <input type="checkbox" id="Choice5"
+     name="nomination" @onclick = "() => AddList(5)">
+    <label for="contactChoice2">Достижения в спортивной деятельности</label><br />
+
+    <button type="submit">Подтвердить</button>
+</EditForm>
+
+
+@code {
+    private index exampleModel = new();
+
+    private void Methoion(int x){
+        exampleModel.Semestr = x;
+
+    }
+
+    private void AddList(int x)
+    {
+        exampleModel.Nomination.Add(x);
+
+    }
+    private void HandleSubmit() 
+    {
+        Console.WriteLine(Environment.CurrentDirectory);
+        IWorkbook workbook = new XSSFWorkbook("res.xlsx");
+        var sheet = workbook.GetSheetAt(0);
+        var row = sheet.GetRow(3);
+        var cell = row.GetCell(7);
+        cell.CellStyle.Alignment = HorizontalAlignment.Center;
+        cell.SetCellValue(exampleModel.Semestr);
+        sheet = workbook.GetSheetAt(1);
+        row = sheet.GetRow(3);
+        cell = row.GetCell(5);
+        cell.SetCellValue(exampleModel.Semestr);
+        sheet = workbook.GetSheetAt(2);
+        row = sheet.GetRow(3);
+        cell = row.GetCell(5);
+        cell.SetCellValue(exampleModel.Semestr);
+        sheet = workbook.GetSheetAt(3);
+        row = sheet.GetRow(3);
+        cell = row.GetCell(5);
+        cell.SetCellValue(exampleModel.Semestr);
+        sheet = workbook.GetSheetAt(4);
+        row = sheet.GetRow(3);
+        cell = row.GetCell(5);
+        cell.SetCellValue(exampleModel.Semestr);
+        sheet = workbook.GetSheetAt(5);
+        row = sheet.GetRow(3);
+        cell = row.GetCell(5);
+        cell.SetCellValue(exampleModel.Semestr);
+        AddCell(workbook,0, 5, 7, exampleModel.Faculty);
+        AddCell(workbook, 0, 6, 7, exampleModel.Fio);
+        AddCell(workbook, 0, 22, 7, exampleModel.Fio);
+        AddCell(workbook, 0, 23, 7, SerchDean());
+        AddCell(workbook, 0, 7, 7, exampleModel.Number);
+        AddCell(workbook, 0, 8, 7, exampleModel.Email);
+        AddCell(workbook,0, 21, 15, exampleModel.Date);
+        AddCell(workbook, 0, 3, 9, SerchDateNow(exampleModel.Year)[0]);
+        AddCell(workbook, 1, 3, 7, SerchDateNow(exampleModel.Year)[0]);
+        AddCell(workbook, 2, 3, 7, SerchDateNow(exampleModel.Year)[0]);
+        AddCell(workbook, 3, 3, 7, SerchDateNow(exampleModel.Year)[0]);
+        AddCell(workbook, 4, 3, 7, SerchDateNow(exampleModel.Year)[0]);
+        AddCell(workbook, 5, 3, 7, SerchDateNow(exampleModel.Year)[0]);
+        AddCell(workbook, 0, 3, 10, SerchDateNow(exampleModel.Year)[1]);
+        AddCell(workbook, 1, 3, 8, SerchDateNow(exampleModel.Year)[1]);
+        AddCell(workbook, 2, 3, 8, SerchDateNow(exampleModel.Year)[1]);
+        AddCell(workbook, 3, 3, 8, SerchDateNow(exampleModel.Year)[1]);
+        AddCell(workbook, 4, 3, 8, SerchDateNow(exampleModel.Year)[1]);
+        AddCell(workbook, 5, 3, 8, SerchDateNow(exampleModel.Year)[1]);
+        Nominations(workbook, exampleModel.Nomination);
+        string ExcelPath = "ress.xlsx";
+        MemoryStream stream = new MemoryStream();
+        workbook.Write(stream, false);
+        var buf = stream.ToArray();
+        using (FileStream fs = new FileStream(ExcelPath, FileMode.Create, FileAccess.Write))
+        {
+            fs.Write(buf, 0, buf.Length);
+            fs.Flush();
+        }
+    }
+    private void Nominations(IWorkbook workbook,List<int> Nomination)
+    {
+        for (int i=1; i<=5;i++){
+            if (Nomination.Contains(i)){
+                AddCell(workbook, 0, i + 9, 14, "+");
+            }
+            else AddCell(workbook, 0, i + 9, 14, " ");
+        }
+    }
+    private void AddCell(IWorkbook workbook, int sheet1, int row, int cell, string value)
+    {
+        var sheet = workbook.GetSheetAt(sheet1);
+        var row1 = sheet.GetRow(row);
+        var cell1 = row1.GetCell(cell);
+        cell1.SetCellValue(value);
+    }
+
+    private String[] SerchDateNow(string Date){
+        
+        String[] Dates = Date.Split("-");
+        return Dates;
+    }
+
+    private string SerchDean(){
+        string Dean;
+        switch (exampleModel.Faculty){
+            case (("Биолого-химический факультет") or ("биолого-химический факультет")):
+                Dean = "Фатеев Александр Владимирович";
+                break;
+            case (("Институт иностранных языков и международного сотрудничества") or
+                 ("институт иностранных языков и международного сотрудничества")):
+                Dean = "Богданова Анна Геннадьевна";
+                return Dean;
+                
+            case (("Историко-филологический факультет") or
+                 ("историко-филологический факультет")):
+                Dean = "Юрченкова Оксана Николаевна";
+                return Dean;
+            case (("Физико-математический факультет") or
+                 ("физико-математический факультет")):
+                Dean = "Пьяных Елена Георгиевна";
+                return Dean;
+            case (("Институт физической культуры и спорта") or
+                 ("институт физической культуры и спорта")):
+                Dean = "Вакурин Анатолий Николаевич";
+                return Dean;
+            case (("Институт развития педагогического образования") or
+                 ("институт развития педагогического образования")):
+                Dean = "Семенова Наталия Альбертовна";
+                return Dean;
+            case (("Институт детства и артпедагогики") or
+                 ("институт детства и артпедагогики")):
+                Dean = "Дроздецкая Ирина Александровна";
+                return Dean;
+            case (("Факультет психологии и специального образования") or
+                 ("факультет психологии и специального образования")):
+                Dean = "Каракулова Ольга Викторовна";
+                return Dean;
+            case (("Технолого-экономический факультет ") or
+                 ("технолого-экономический факультет ")):
+                Dean = "Колесникова Елена Владимировна";
+                return Dean;
+        }
+        return "ggg" ;
+    }
+    private void Redirect(string link)
+    {
+        NavManager.NavigateTo(link);
+        //"/FetchData"
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+<SurveyPrompt Title="How is Blazor working for you?" />

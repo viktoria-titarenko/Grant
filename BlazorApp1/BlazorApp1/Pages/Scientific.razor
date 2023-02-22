@@ -1,0 +1,135 @@
+﻿@page "/scientific"
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager NavManager
+@using NPOI.SS.UserModel;
+@using NPOI.XSSF.UserModel;
+<PageTitle>Scientific</PageTitle>
+
+@using Microsoft.Extensions.Logging
+@inject ILogger<scientific> Logger
+<h2>ДОСТИЖЕНИЯ В НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ ДЕЯТЕЛЬНОСТИ													
+</h2> 
+    <EditForm Model="@exampleModel" OnSubmit="@HandleSubmit"><br />
+        <h5>1. Награда, победа в конкурсах за достижения в научно-исследовательской деятельности (Стипендия Президента РФ, Стипендия Правительства РФ, Премия Законодательной Думы Томской области, именные стипендии ТГПУ и т.д.).</h5>
+        <h6>Международного уровня:</h6>
+        <label>За первый из представленных семестров:</label>
+         <input @onclick = '() => National1("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => National1(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+     <label>За второй из представленных семестров:</label>
+         <input @onclick = '() => National2("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => National2(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+    <label>Итого за весь период:</label>
+    <InputText id="project" @bind-Value="exampleModel.GreatNationalAll" /><br />
+
+      <h6>Всероссийского уровня:</h6>
+             <label>За первый из представленных семестров:</label>
+         <input @onclick = '() => Russian1("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => Russian1(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+     <label>За второй из представленных семестров:</label>
+         <input @onclick = '() => Russian2("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => Russian2(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+    <label>Итого за весь период:</label>
+    <InputText id="project" @bind-Value="exampleModel.GreatRussianAll" /><br />
+
+    <h6>Регионального уровня:</h6>
+             <label>За первый из представленных семестров:</label>
+         <input @onclick = '() => Regional1("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => Regional1(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+     <label>За второй из представленных семестров:</label>
+         <input @onclick = '() => Regional2("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => Regional2(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+    <label>Итого за весь период:</label>
+    <InputText id="project" @bind-Value="exampleModel.GreatRegionalAll" /><br />
+
+    <h6>Вузовского уровня:</h6>
+             <label>За первый из представленных семестров:</label>
+         <input @onclick = '() => University1("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => University1(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+     <label>За второй из представленных семестров:</label>
+         <input @onclick = '() => University2("+")' type="radio" id="contactChoice1"
+     name="national" >
+    <label for="contactChoice1">Да</label>  
+    <input @onclick = '() => University2(" ")' type="radio" id="contactChoice2"
+     name="national">
+    <label for="contactChoice2">Нет</label><br />
+    <label>Итого за весь период:</label>
+     <InputText id="project" @bind-Value="exampleModel.GreatUniversityAll" /><br />
+
+
+    <h5>1. Награда, победа в конкурсах за достижения в научно-исследовательской деятельности (Стипендия Президента РФ, Стипендия Правительства РФ, Премия Законодательной Думы Томской области, именные стипендии ТГПУ и т.д.).</h5>
+
+
+    </EditForm>
+
+
+@code {
+    private scientific exampleModel = new();
+    private void HandleSubmit(){
+
+    }
+
+    private void National1(string ans){
+        exampleModel.GreatNational1 = ans;
+    }
+    private void National2(string ans)
+    {
+        exampleModel.GreatNational2 = ans;
+    }
+    private void Russian1(string ans)
+    {
+        exampleModel.GreatRussian1 = ans;
+    }
+    private void Russian2(string ans)
+    {
+        exampleModel.GreatRussian2 = ans;
+    }
+    private void Regional1(string ans)
+    {
+        exampleModel.GreatRegional1 = ans;
+    }
+    private void Regional2(string ans)
+    {
+        exampleModel.GreatRegional2 = ans;
+    }
+    private void University1(string ans)
+    {
+        exampleModel.GreatUniversity1= ans;
+    }
+    private void University2(string ans)
+    {
+        exampleModel.GreatUniversity2= ans;
+    }
+
+
+
+}
+
+
